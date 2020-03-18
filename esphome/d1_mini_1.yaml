@@ -1,0 +1,28 @@
+---
+substitutions:
+  device: d1_mini_1
+  name: D1 Mini 1
+  reboot_timeout: 7d
+  update_interval: 60s
+
+esphome:
+  name: ${device}
+  platform: ESP8266
+  board: d1_mini
+
+<<: !include common/common.yaml
+
+i2c:
+
+sensor:
+  - !include common/sensor/wifi-signal.yaml
+  - !include common/sensor/uptime.yaml  
+  - platform: bmp280
+    temperature:
+      name: ${name} Temperature
+      id: d1_mini_1_temperature
+      oversampling: 16x
+    pressure:
+      name: ${name} Pressure
+    address: 0x76
+    update_interval: ${update_interval}

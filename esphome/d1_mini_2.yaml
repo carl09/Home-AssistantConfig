@@ -1,0 +1,24 @@
+---
+substitutions:
+  device: d1_mini_2
+  name: D1 Mini 2
+  reboot_timeout: 7d
+  update_interval: 60s
+
+esphome:
+  name: ${device}
+  platform: ESP8266
+  board: d1_mini
+
+<<: !include common/common.yaml 
+
+light:
+  - platform: monochromatic
+    name: "D1 Mini 2 Light"
+    output: output_component1
+
+# Example output entry
+output:
+  - platform: esp8266_pwm
+    id: output_component1
+    pin: D6

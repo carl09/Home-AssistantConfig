@@ -1,0 +1,50 @@
+---
+substitutions:
+  device: d1_mini_4
+  name: D1 Mini 4
+  reboot_timeout: 7d
+  update_interval: 60s
+
+esphome:
+  name: ${device}
+  platform: ESP8266
+  board: d1_mini
+  includes:
+    - custom_sensor_bro.h
+  libraries:
+    - IRRemoteESP8266
+
+<<: !include common/common.yaml
+
+status_led:
+  pin: D3
+
+i2c:
+
+sensor:
+  - !include common/sensor/wifi-signal.yaml
+  - !include common/sensor/uptime.yaml  
+  - platform: bme280
+    temperature:
+      name: ${name} Temperature
+      id: d1_mini_4_temperature
+      oversampling: 2x
+    pressure:
+      name: ${name} Pressure
+      oversampling: 16x
+    humidity:
+      name: ${name} Humidity
+      oversampling: 1x
+    address: 0x76
+    iir_filter: 16x
+    update_interval: 60s
+
+climate:
+  - platform: custom
+    lambda: |-
+      auto my_custom_climate = new SensorBroClimate(D5);
+      my_custom_climate->set_sensor(id(d1_mini_4_temperature));
+      App.register_component(my_custom_climate);
+      return {my_custom_climate};
+    climates:
+      - name: ${name} Climate
