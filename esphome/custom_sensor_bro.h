@@ -3,13 +3,6 @@
 #include <IRsend.h>
 #include <ir_MitsubishiHeavy.h>
 
-// const uint16_t kIrLed = D5;
-// const uint16_t ledPinOut = D7;
-
-// IRMitsubishiHeavy152Ac ac(kIrLed); // = IRMitsubishiHeavy152Ac(kIrLed); // (kIrLed); // Set the GPIO used for sending messages.
-
-// IRMitsubishiHeavy152Ac& IRMitsubishiHeavy152Ac::operator=(const IRMitsubishiHeavy152Ac&)
-
 class SensorBroClimate : public Climate, public Component
 {
 
@@ -133,7 +126,6 @@ public:
         traits.set_supports_swing_mode_horizontal(true);
 
         return traits;
-        // return ClimateTraits();
     }
 
     void set_sensor(Sensor *sensor) { this->sensor_ = sensor; }
