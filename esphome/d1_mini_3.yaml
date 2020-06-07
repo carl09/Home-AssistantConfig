@@ -31,7 +31,7 @@ sensor:
     humidity:
       name: ${name} Humidity
     address: 0x76
-    update_interval: 60s
+    update_interval: $update_interval
 
 climate:
   - platform: custom

@@ -9,16 +9,37 @@ esphome:
   name: ${device}
   platform: ESP8266
   board: d1_mini
+  # includes:
+  #   - custom_components/st7735_base/st7735_base.h
+  #   - custom_components/st7735_spi/st7735_spi.h
 
 <<: !include common/common.yaml 
 
-light:
-  - platform: monochromatic
-    name: "D1 Mini 2 Light"
-    output: output_component1
+# spi:
+#   clk_pin: D7 # D5 # 13
+#   mosi_pin: D5 # D7 #11
 
-# Example output entry
-output:
-  - platform: esp8266_pwm
-    id: output_component1
-    pin: D6
+sensor:
+- platform: dht
+  pin: D4
+  model: DHT11
+  temperature:
+    name: ${name} Temperature
+  humidity:
+    name: ${name} Humidity
+  update_interval: $update_interval
+
+# font:
+#   - file: "OpenSans-Regular.ttf"
+#     id: my_font
+#     size: 10
+
+# display:
+#   # - platform: st7735
+#   - platform: st7735_spi
+#     model: "ST7735_128X128"
+#     cs_pin: D1
+#     dc_pin: D3
+#     reset_pin: D2
+#     lambda: |-
+#       it.print(0, 0, id(my_font), "Hello World!");

@@ -1,0 +1,15 @@
+---
+substitutions:
+  device: kogan_1
+  name: Kogan 1
+  reboot_timeout: 7d
+  update_interval: 60s
+
+esphome:
+  name: ${device}
+  platform: ESP8266
+  board: esp8285
+
+<<: !include common/common.yaml
+
+<<: !include device_config/kogan_plug_with_energy.yaml

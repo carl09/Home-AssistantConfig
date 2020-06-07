@@ -1,0 +1,7 @@
+---
+platform: uptime
+name: ${name} Uptime
+id: uptime_sensor
+unit_of_measurement: h
+filters:
+  - lambda: return int((x + 1800.0) / 3600.0);

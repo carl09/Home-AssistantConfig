@@ -17,17 +17,6 @@
         device_class: temperature
         value_template: "{{ state_attr('weather.bom_essendon_airport', 'temperature') }}"
         unit_of_measurement: "°C"
-  - platform: yweather
-    monitored_conditions:
-      - weather
-      - weather_current
-      - temp_min
-      - temp_max
-      - wind_speed
-      - pressure
-      - visibility
-      - humidity
-      - temperature
   - platform: command_line
     name: CPU Temperature
     command: "cat /sys/class/thermal/thermal_zone0/temp"
@@ -91,17 +80,41 @@
       - "sleep/timeInBed"
       - "activities/steps"
       - "devices/battery"
-  - platform: airvisual
-    api_key: !secret airvisual_token
-    monitored_conditions:
-        - us
-        - cn
-    city: ascot-vale
-    state: victoria
-    country: australia
+  # - platform: airvisual
+  #   api_key: !secret airvisual_token
+  #   geographies:
+  #       - latitude: !secret geo_home_lat 
+  #         longitude: !secret geo_home_long 
+    # monitored_conditions:
+    #     - us
+        # - cn
+    # city: ascot-vale
+    # state: victoria
+    # country: australia
   - platform: kodi_recently_added
     host: 192.168.10.70
     port: 8080
     tcp_port: 9090
-    
-    
+
+  - platform: template
+    sensors:
+      tplink_1_amps:
+        friendly_name_template: "{{ states.switch.tplink_1.name}} Current"
+        value_template: '{{ states.switch.tplink_1.attributes["current_a"] | float }}'
+        unit_of_measurement: 'A'
+      tplink_1_watts:
+        friendly_name_template: "{{ states.switch.tplink_1.name}} Current Consumption"
+        value_template: '{{ states.switch.tplink_1.attributes["current_power_w"] | float }}'
+        unit_of_measurement: 'W'
+      tplink_1_total_kwh:
+        friendly_name_template: "{{ states.switch.tplink_1.name}} Total Consumption"
+        value_template: '{{ states.switch.tplink_1.attributes["total_energy_kwh"] | float }}'
+        unit_of_measurement: 'kWh'
+      tplink_1_volts:
+        friendly_name_template: "{{ states.switch.tplink_1.name}} Voltage"
+        value_template: '{{ states.switch.tplink_1.attributes["voltage"] | float }}'
+        unit_of_measurement: 'V'
+      tplink_1_today_kwh:
+        friendly_name_template: "{{ states.switch.tplink_1.name}} Today's Consumption"
+        value_template: '{{ states.switch.tplink_1.attributes["today_energy_kwh"] | float }}'
+        unit_of_measurement: 'kWh'

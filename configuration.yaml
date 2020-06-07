@@ -1,18 +1,20 @@
-person:
+default_config:
 
-system_health:
+# person:
 
-history:
+# system_health:
 
-updater:
+# history:
 
-mobile_app:
+# updater:
 
-map:
+# mobile_app:
 
-sun:
+# map:
 
-config:
+# sun:
+
+# config:
 
 frontend:
   themes: !include_dir_merge_named themes
@@ -103,12 +105,17 @@ camera:
     
 stream:
 
+airvisual:
+  api_key: !secret airvisual_token
+  geographies:
+    city: maribyrnong
+    state: victoria
+    country: australia
 
-
-input_boolean:
-  oliver_heater:
-    name: Switch Climate Managment On
-    initial: off
+# input_boolean:
+#   oliver_heater:
+#     name: Switch Climate Managment On
+#     # initial: off
 
 influxdb:
   host: !secret influxdb_host
