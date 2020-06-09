@@ -8,8 +8,10 @@
 !*.md
 !esphome
 !esphome/common
-!esphome/common/sensor
-!custom_sensor_bro.h
+!esphome/common/*
+!esphome/device_config
+!esphome/custom_components
+!esphome/custom_components/*
 
 # Ignore folders.
 .storage

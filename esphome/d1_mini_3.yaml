@@ -9,12 +9,15 @@ esphome:
   name: ${device}
   platform: ESP8266
   board: d1_mini
-  includes:
-    - custom_sensor_bro.h
-  libraries:
-    - IRRemoteESP8266
+  # includes:
+  #   - custom_sensor_bro.h
+  # libraries:
+  #   - IRRemoteESP8266
 
 <<: !include common/common.yaml
+
+# web_server:
+#   port: 80
 
 i2c:
 
@@ -33,13 +36,19 @@ sensor:
     address: 0x76
     update_interval: $update_interval
 
-climate:
-  - platform: custom
-    lambda: |-
-      auto my_custom_climate = new SensorBroClimate(D6);
-      my_custom_climate->set_sensor(id(d1_mini_3_temperature));
-      App.register_component(my_custom_climate);
-      return {my_custom_climate};
+# climate:
+#   - platform: custom
+#     lambda: |-
+#       auto my_custom_climate = new SensorBroClimate(D6);
+#       my_custom_climate->set_sensor(id(d1_mini_3_temperature));
+#       App.register_component(my_custom_climate);
+#       return {my_custom_climate};
   
-    climates:
-      - name: ${name} Climate
+#     climates:
+#       - name: ${name} Climate
+
+climate:
+  - platform: sensor_bro       # adjust to match your AC unit!
+    pin: D6 # GPIO12 # D6
+    sensor: d1_mini_3_temperature
+    name: ${name} Climate

@@ -1,0 +1,59 @@
+---
+status_led:
+  pin:
+    number: GPIO1
+    inverted: True
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO3
+      inverted: True
+    name: ${name} Switch
+    internal: True
+    on_press:
+      then:
+        if:
+          condition:
+            lambda: return id(relay_a).state || id(relay_b).state || id(relay_c).state || id(relay_d).state;
+          then:
+            # At least one socket is on.  Turn off all sockets.
+            - switch.turn_off: relay_a
+            - switch.turn_off: relay_b
+            - switch.turn_off: relay_c
+            - switch.turn_off: relay_d
+          else:
+            # No sockets are on.  Turn on all sockets.
+            - switch.turn_on: relay_a
+            - switch.turn_on: relay_b
+            - switch.turn_on: relay_c
+            - switch.turn_on: relay_d
+
+switch:
+  - platform: gpio
+    pin: GPIO05
+    name: "${name} - A"
+    id: relay_a
+    restore_mode: restore_default_off
+    icon: mdi:power-socket-au
+
+  - platform: gpio
+    pin: GPIO04
+    name: "${name} - B"
+    id: relay_b
+    restore_mode: restore_default_off
+    icon: mdi:power-socket-au
+
+  - platform: gpio
+    pin: GPIO13
+    name: "${name} - C"
+    id: relay_c
+    restore_mode: restore_default_off
+    icon: mdi:power-socket-au
+
+  - platform: gpio
+    pin: GPIO12
+    name: "${name} - D"
+    id: relay_d
+    restore_mode: restore_default_off
+    icon: mdi:power-socket-au
