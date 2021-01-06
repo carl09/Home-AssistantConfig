@@ -1,0 +1,115 @@
+---
+substitutions:
+  device: d1_mini_5
+  name: D1 Mini 5
+  reboot_timeout: 7d
+  update_interval: 60s
+
+esphome:
+  name: ${device}
+  platform: ESP8266
+  board: d1_mini
+  # includes:
+  #   - custom_sensor_bro.h
+  # libraries:
+  #   - IRRemoteESP8266
+
+<<: !include common/common.yaml
+
+<<: !include common/mqtt.yaml 
+
+time:
+  - platform: homeassistant
+    id: datetime
+
+binary_sensor:
+  - platform: gpio
+    id: 'button4'
+    pin:
+      number: D3
+      inverted: True
+    on_press: 
+      - mqtt.publish:
+          topic: kitchen/bottle/timmer
+          payload: 2
+  - platform: gpio
+    id: 'button3'
+    pin:
+      number: D5
+      inverted: True
+    on_press: 
+      - mqtt.publish:
+          topic: kitchen/bottle/timmer
+          payload: 4
+  - platform: gpio
+    id: 'button1'
+    pin:
+      number: D7
+      inverted: True
+    on_press: 
+      - mqtt.publish:
+          topic: kitchen/bottle/timmer
+          payload: 5
+  - platform: gpio
+    id: 'button2'
+    pin:
+      number: D6
+      inverted: True
+    on_press: 
+      - mqtt.publish:
+          topic: kitchen/bottle/timmer
+          payload: 6
+
+status_led:
+  pin:
+    number: D8
+    # inverted: True
+
+sensor:
+  - platform: mqtt_subscribe
+    name: "Data for Bottle warmer"
+    id: mysensor
+    topic: kitchen/bottle/timmer
+  - platform: homeassistant
+    id: inside_temperature
+    entity_id: sensor.wroom_32_1_temperature
+    internal: true
+
+text_sensor:
+  - platform: mqtt_countdown  
+    id: my_countdown2
+    topic: kitchen/bottle/timmer
+    on_end: 
+      - mqtt.publish:
+          topic: kitchen/bottle/status
+          payload: "done"
+    on_start: 
+      - mqtt.publish:
+          topic: kitchen/bottle/status
+          payload: "start"
+
+font:
+  - file: "OpenSans-Regular.ttf"
+    id: font1
+    size: 24
+  - file: "OpenSans-Regular.ttf"
+    id: font2
+    size: 18
+
+i2c:
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x32"
+    reset_pin: D0
+    address: 0x3C
+    lambda: |-
+      if (id(my_countdown2).state.length() != 0) {
+        it.printf(0, 0, id(font1), TextAlign::TOP_LEFT, "%s", id(my_countdown2).state.c_str());
+        it.strftime(127, 0, id(font2), TextAlign::TOP_RIGHT, "%H:%M", id(datetime).now());
+      } else {
+        it.strftime(0, 0, id(font1), TextAlign::TOP_LEFT, "%H:%M", id(datetime).now());
+        if (id(inside_temperature).has_state()) {
+          it.printf(127, 0, id(font2), TextAlign::TOP_RIGHT, "%.1f°", id(inside_temperature).state);
+        }
+      }

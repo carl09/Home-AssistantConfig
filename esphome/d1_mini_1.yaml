@@ -17,12 +17,22 @@ i2c:
 sensor:
   - !include common/sensor/wifi-signal.yaml
   - !include common/sensor/uptime.yaml  
-  - platform: bmp280
+  # - platform: bmp280
+  #   temperature:
+  #     name: ${name} Temperature
+  #     id: d1_mini_1_temperature
+  #     oversampling: 16x
+  #   pressure:
+  #     name: ${name} Pressure
+  #   address: 0x76
+  #   update_interval: ${update_interval}
+  - platform: bme280
     temperature:
       name: ${name} Temperature
-      id: d1_mini_1_temperature
       oversampling: 16x
     pressure:
       name: ${name} Pressure
+    humidity:
+      name: ${name} Humidity
     address: 0x76
-    update_interval: ${update_interval}
+    update_interval: $update_interval

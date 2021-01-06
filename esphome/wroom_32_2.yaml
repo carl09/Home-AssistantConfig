@@ -1,0 +1,17 @@
+---
+substitutions:
+  device: wroom_32_2
+  name: wroom 32 2
+  reboot_timeout: 7d
+  update_interval: 60s
+
+esphome:
+  name: ${device}
+  platform: ESP32
+  # board: nodemcu-32s
+  board: esp-wrover-kit
+
+<<: !include common/common.yaml
+
+
+# esp32_ble_tracker:

@@ -9,37 +9,63 @@ esphome:
   name: ${device}
   platform: ESP8266
   board: d1_mini
-  # includes:
-  #   - custom_components/st7735_base/st7735_base.h
-  #   - custom_components/st7735_spi/st7735_spi.h
 
 <<: !include common/common.yaml 
+<<: !include common/mqtt.yaml 
 
-# spi:
-#   clk_pin: D7 # D5 # 13
-#   mosi_pin: D5 # D7 #11
+binary_sensor:
+  - platform: gpio
+    id: 'button1'
+    pin:
+      number: D7
+      inverted: True
+    on_press: 
+      - mqtt.publish:
+          topic: kitchen/bottle/timmer
+          payload: 2
+
+status_led:
+  pin:
+    number: D8
+    # inverted: True
 
 sensor:
-- platform: dht
-  pin: D4
-  model: DHT11
-  temperature:
-    name: ${name} Temperature
-  humidity:
-    name: ${name} Humidity
-  update_interval: $update_interval
+  - platform: dht
+    pin: D4
+    model: DHT11
+    temperature:
+      name: ${name} Temperature
+      id: inside_temperature
+    humidity:
+      name: ${name} Humidity
+    update_interval: $update_interval
+    
+    
 
-# font:
-#   - file: "OpenSans-Regular.ttf"
-#     id: my_font
-#     size: 10
+font:
+  - file: "OpenSans-Regular.ttf"
+    id: font1
+    size: 24
+  - file: "OpenSans-Regular.ttf"
+    id: font2
+    size: 18
 
-# display:
-#   # - platform: st7735
-#   - platform: st7735_spi
-#     model: "ST7735_128X128"
-#     cs_pin: D1
-#     dc_pin: D3
-#     reset_pin: D2
-#     lambda: |-
-#       it.print(0, 0, id(my_font), "Hello World!");
+spi:
+  clk_pin: D5
+  mosi_pin: D7
+  # miso_pin: D6
+
+display:
+  - platform: st7735
+    model: INITR_144GREENTAB
+    cs_pin: D1
+    dc_pin: D3
+    reset_pin: D2
+    colstart: 128
+    rowstart: 128
+    devicewidth: 0
+    deviceheight: 0
+    eightbitcolor: true
+    update_interval: 5s
+    lambda: |-
+      it.print(0, 0, id(font1), "Hello World!");    

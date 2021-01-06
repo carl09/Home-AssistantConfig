@@ -10,7 +10,7 @@ namespace sensor_bro {
 
 static const char *TAG = "sensor_bro.climate";
 
-const uint8_t DEFAULT_TEMP_MIN = 16;         // Celsius
+const uint8_t DEFAULT_TEMP_MIN = 18;         // Celsius
 const uint8_t DEFAULT_TEMP_MAX = 31;         // Celsius
 const uint8_t DEFAULT_TARGET_TEMP_MAX = 22;  // Celsius
 
@@ -210,18 +210,22 @@ void SensorBroClimate::setSwingMode(bool send) {
     case climate::CLIMATE_SWING_OFF:
       this->ac_->setSwingVertical(swingVOff);
       this->ac_->setSwingHorizontal(swingHOff);
+      this->ac_->set3D(false);
       break;
     case climate::CLIMATE_SWING_BOTH:
-      this->ac_->setSwingVertical(kMitsubishiHeavy152SwingVAuto);
-      this->ac_->setSwingHorizontal(kMitsubishiHeavy152SwingHAuto);
+      // this->ac_->setSwingVertical(kMitsubishiHeavy152SwingVAuto);
+      // this->ac_->setSwingHorizontal(kMitsubishiHeavy152SwingHAuto);
+      this->ac_->set3D(true);
       break;
     case climate::CLIMATE_SWING_VERTICAL:
       this->ac_->setSwingVertical(kMitsubishiHeavy152SwingVAuto);
       this->ac_->setSwingHorizontal(swingHOff);
+      this->ac_->set3D(false);
       break;
     case climate::CLIMATE_SWING_HORIZONTAL:
       this->ac_->setSwingVertical(swingVOff);
       this->ac_->setSwingHorizontal(kMitsubishiHeavy152SwingHAuto);
+      this->ac_->set3D(false);
       break;
   }
 

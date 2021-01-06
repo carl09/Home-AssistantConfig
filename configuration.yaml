@@ -20,7 +20,7 @@ frontend:
   themes: !include_dir_merge_named themes
 
 http:
-  base_url: !secret http_base_url
+  # base_url: !secret http_base_url
   ip_ban_enabled: true
   cors_allowed_origins:
     - "http://localhost:4200"
@@ -51,9 +51,9 @@ group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
 
-climate:
-  - platform: sensibo
-    api_key: !secret sensibo_api_key
+# climate:
+#   - platform: sensibo
+#     api_key: !secret sensibo_api_key
     
 dyson:
   username: !secret dyson_username
@@ -73,13 +73,13 @@ media_player:
   - platform: braviatv
     host: 192.168.10.72
     name: "Sony Bravia TV 60 inch"
-  - platform: kodi
-    host: 192.168.10.70
+  # - platform: kodi
+  #   host: 192.168.10.70
     
 notify:
-  - platform: kodi
-    name: KODI_NOTIFIER
-    host: 192.168.10.70
+  # - platform: kodi
+  #   name: KODI_NOTIFIER
+  #   host: 192.168.10.70
   - platform: html5
     name: GOOGLE_NOTIFIER
     vapid_pub_key: !secret google_vapid_pub_key
@@ -87,16 +87,16 @@ notify:
     vapid_email: !secret google_vapid_email
     
 weather:
-  - platform: bom
-    name: Essendon Airport
-    station: IDV60901.95866
+  # - platform: bom
+  #   name: Essendon Airport
+  #   station: IDV60901.95866
   - platform: darksky
     api_key: !secret darksky_api_key
     mode: daily
       
 camera:
-  - platform: bom
-    location: Melbourne
+  # - platform: bom
+  #   location: Melbourne
   - platform: mjpeg
     name: UpstairsCamera
     mjpeg_url: http://192.168.10.74:8081/

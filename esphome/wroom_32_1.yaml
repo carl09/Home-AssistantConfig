@@ -1,0 +1,88 @@
+---
+substitutions:
+  device: wroom_32_1
+  name: wroom 32 1
+  reboot_timeout: 7d
+  update_interval: 60s
+
+esphome:
+  name: ${device}
+  platform: ESP32
+  # board: nodemcu-32s
+  board: esp-wrover-kit
+
+<<: !include common/common.yaml
+
+
+esp32_ble_tracker:
+
+ble_client:
+  # - mac_address: 24:62:AB:FF:5E:02 #  DE:75:DC:3A:82:0D
+  - mac_address: DE:75:DC:3A:82:0D
+    id: itag_black
+
+
+i2c:
+
+# binary_sensor:
+#   - platform: ble_presence
+#     mac_address: D1:69:B8:86:A6:F4
+#     name: "Carl Charge 2 Presence"
+#   - platform: ble_presence
+#     mac_address: CA:AE:96:D3:DC:6F
+#     name: "Evelyn Alta HR Presence"
+
+sensor:
+  - !include common/sensor/wifi-signal.yaml
+  - !include common/sensor/uptime.yaml  
+  - platform: bme280
+    temperature:
+      name: ${name} Temperature
+      id: temperature_sensor
+      oversampling: 16x
+    pressure:
+      name: ${name} Pressure
+    humidity:
+      name: ${name} Humidity
+    address: 0x76
+    update_interval: $update_interval
+  - platform: ble_rssi
+    mac_address: D1:69:B8:86:A6:F4
+    name: "Carl Charge 2 RSSI value"
+  - platform: ble_rssi
+    mac_address: CA:AE:96:D3:DC:6F
+    name: "Evelyn Alta HR RSSI value"
+    
+  # - platform: ble_client
+  #   ble_client_id: itag_black
+  #   name: "iTag battery level"
+  #   service_uuid: '180f'
+  #   characteristic_uuid: '2a19'
+  #   icon: 'mdi:battery'
+  #   unit_of_measurement: '%'    
+
+  - platform: ble_client
+    ble_client_id: itag_black
+    name: "iTag temperature level"
+    # service_uuid: '181a'
+    # characteristic_uuid: '2a6e'
+    service_uuid: '1809'
+    characteristic_uuid: '2a1c'
+    icon: 'mdi:temperature'
+    unit_of_measurement: '°C'   
+    # accuracy_decimals: 4
+    notify: true
+    
+  # - platform: ble_client
+  #   ble_client_id: itag_black
+  #   name: "iTag humidity level"
+  #   service_uuid: '181a'
+  #   characteristic_uuid: '2A6F'
+  #   icon: 'mdi:humidity'
+  #   unit_of_measurement: '%'     
+
+climate:
+  - platform: sensor_bro       # adjust to match your AC unit!
+    pin: GPIO5 # GPIO12 # D6
+    sensor: temperature_sensor
+    name: ${name} Climate

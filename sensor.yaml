@@ -1,36 +1,26 @@
   # Weather prediction
-  - platform: yr
+  # - platform: yr
   - platform: template
     sensors:
-      lounge_current_temperature:
-        friendly_name: "Lounge Current Tempeture"
-        device_class: temperature
-        value_template: "{{ state_attr('climate.lounge', 'current_temperature') }}"
-        unit_of_measurement: "°C"
-      lounge_current_humidity:
-        friendly_name: "Lounge Current Humidity"
-        device_class: temperature
-        value_template: "{{ state_attr('climate.lounge', 'current_humidity') }}"
-        unit_of_measurement: "%"
       outside_current_temperature:
         friendly_name: "Outside Current Tempeture"
         device_class: temperature
-        value_template: "{{ state_attr('weather.bom_essendon_airport', 'temperature') }}"
+        value_template: "{{ state_attr('weather.dark_sky', 'temperature') }}"
         unit_of_measurement: "°C"
   - platform: command_line
     name: CPU Temperature
     command: "cat /sys/class/thermal/thermal_zone0/temp"
     unit_of_measurement: "°C"
     value_template: '{{ value | multiply(0.001) | round(1) }}'
-  - platform: systemmonitor
-    resources:
-      - type: disk_use_percent
-        arg: /home
-      - type: memory_free
-      - type: load_1m 
-      - type: throughput_network_in
-      - type: throughput_network_out
-      - type: processor_use
+  # - platform: systemmonitor
+  #   resources:
+  #     - type: disk_use_percent
+  #       arg: /home
+  #     - type: memory_free
+  #     - type: load_1m 
+  #     - type: throughput_network_in
+  #     - type: throughput_network_out
+  #     - type: processor_use
   - platform: aarlo
     monitored_conditions:
     - total_cameras
@@ -91,10 +81,10 @@
     # city: ascot-vale
     # state: victoria
     # country: australia
-  - platform: kodi_recently_added
-    host: 192.168.10.70
-    port: 8080
-    tcp_port: 9090
+  # - platform: kodi_recently_added
+  #   host: 192.168.10.70
+  #   port: 8080
+  #   tcp_port: 9090
 
   - platform: template
     sensors:
